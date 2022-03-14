@@ -3,7 +3,7 @@
 ![bingo1](https://user-images.githubusercontent.com/92740455/158085557-6f5d7722-0f79-4c92-a263-acce87bba404.jpg)
 
 
-Tecnologias Implementadas
+### Tecnologias Implementadas
 NodeJS
 SpringBoot
 javaScript
@@ -14,5 +14,12 @@ Java
 MongoBd
 MySql
 
-By Adryan Ynfante
-Contacto adryanynfante@gmail.com
+
+### Pendiente
+El juego es ara un solo jugador
+Backend de salas d ejuego y jugadores
+Mostrar jugadores en Linea
+
+## Contacto
+Aplicación desarrollada por  Adryan Ynfante
+Correo: adryanynfante@gmail.com
