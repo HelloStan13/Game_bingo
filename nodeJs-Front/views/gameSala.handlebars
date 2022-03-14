@@ -1,0 +1,597 @@
+{{#if errors}}
+{{#each errors}}
+<div class="alert alert-danger">{{msg}}</div>
+{{/each}}
+{{/if}}
+<div class="container">
+<style type="text/css">            
+   html,body {
+   height: 100%;
+   }
+   body {
+   background-image: url("https://github.com/HelloStan13/paginaweb1/blob/main/fondo_1.jpg?raw=true") ;
+   image-rendering: auto;
+   height:500px;
+   font-size: 16px;
+   color: rgb(0, 0, 0);
+   background-size: cover; 
+   }
+   .contenedor {
+   width: 90%;
+   height: 100%;
+   position: relative;
+   max-width: 1000px;
+   margin: auto;
+   background: rgb(218, 196, 196);
+   }
+   .widget {
+   width: 40%;
+   height: 40%;
+   position: fixed;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   margin: auto;
+   }
+   .widget p {
+   display: block;
+   line-height: 1em;
+   position: absolute;
+   }
+   .fecha {
+   font-family: arial;
+   text-align: center;
+   font-size: 1.8em;
+   margin-bottom: 5px;
+   background: rgba(0,0,0,.5);
+   padding: 20px;
+   width: 100%;
+   position: absolute;
+   }
+   .reloj {
+   font-family: 'Times New Roman', Times, serif;
+   width: 100%;
+   padding: 20px;
+   font-size: 4em;
+   text-align: center;
+   background: rgba(0,0,0,.5);
+   position: fixed;
+   }
+   .reloj .cajaseconds {
+   display: block;  
+   }
+   .reloj .ampm, .reloj .seconds{
+   display: block;
+   font-size: 3rem;
+   }
+   .list-group{
+   color: black !important;
+   }
+   {{!-- estilos carton de bingo y bingo  --}}
+   button.btn{
+   background-color: white;
+   border: 5px;
+   color: black;
+   padding: 14px 45px;
+   text-align: center;
+   font-size: 23px;
+   margin: 4px 2px;
+   transition: 0.3%;
+   }
+   button.btndraw{
+   position: fixed;
+   top: 8%;
+   left: 7%;
+   }
+   table{
+   border-collapse: collapse;
+   color: #000;
+   margin-left: 50px;
+   margin-top: 50px;
+   }
+   th{
+   background-color: #330099;
+   }
+   table,th,td,tr{
+   padding: 20px;
+   color: black;
+   border: 3px solid black;
+   text-align: center;
+   background-color: white;
+   align-content: center;
+   }
+   th{
+   color: rgb(255, 255, 255);
+   background-color: rgb(25, 0, 255);
+   }
+   h3{
+   font-size: 25px;
+   text-align: center;
+   color: #102d85;
+   }
+   td.datanumber{
+   background-color: white;
+   font-family: 'Times New Roman', Times, serif;
+   font-size: 40px;
+   padding: 2px;
+   }
+   td.ball-data{
+   background-color: white;
+   font-family: 'Times New Roman', Times, serif;
+   font-size: 40px;
+   padding: 2px;
+   }
+   table#table-balls{
+   background-color: white;
+   font-family: 'Times New Roman', Times, serif;
+   font-size: 40px;
+   border: 2px solid white;
+   padding: 5px;
+   }
+   input{
+   font-size: 16px;
+   border: none;
+   border-radius: 4px;
+   padding: 8px 15px;
+   margin: 15px;
+   }
+   .free{
+   background-color: rgb(250, 0, 0);
+   }
+   h1#title{
+   font-family: 'Times New Roman', Times, serif;
+   text-align: center;
+   height: 15px;
+   }
+   button:hover{
+   background-color: gray;
+   color: #ffff99;
+   border-bottom: 3px solid white;
+   cursor: pointer;
+   } 
+   .pdrawBall{ font-size:40px;
+   margin: 50px auto;
+   width: 15rem;
+   line-height: 14rem;
+   border-radius: 100%;
+   background-color: #e60000;
+   color: #FFF;
+   text-align:center;
+   position: fixed;
+   }
+</style>
+<section>
+   Esperando usuarios...
+   <script>
+      fetch('http://localhost:9090/users')
+          .then(res => res.text(name))
+          .then(text => console.log(text));
+        
+   </script>
+   <body onload="myFunction()">
+      {{!--     
+      <ul class="list-group">
+         <li class="list-group-item d-flex justify-content-between align-items-center">
+            ingrid
+            <span class="badge badge-primary badge-pill">1</span>
+         </li>
+         <li class="list-group-item d-flex justify-content-between align-items-center">
+            ingrid
+            <span class="badge badge-primary badge-pill">1</span>
+         </li>
+      </ul>
+      --}}
+      <div class="contenedor" id="contenedor">
+         <div class="widget">
+            <div class="fecha">
+               <div id="countdown1">
+                  Por favor espere, cargando sala en: <span id="countdown"></span> <br>
+                  segundos
+               </div>
+            </div>
+         </div>
+      </div>
+      {{!-- generar carton juego --}}
+      <div>
+         <p class="pdrawBall" id="pdrawBall"></p>
+         <input type="text" id="txtInput" placeholder="Ingresa número" style="display:none" value="1">
+         <h3 id="pCount"> </h3>
+         <center>
+            <div id="divBingoCard"></div>
+         </center>
+      </div>
+</section>
+{{!-- funcion para contador --}}
+<script>
+    //aca se modifica el temporizador para el inicio del juego
+   window.onload = updateClock;
+   var totalTime = 3;
+   function updateClock() {
+   document.getElementById('countdown').innerHTML = totalTime;
+   if(totalTime==0){
+   document.getElementById('contenedor').style.display="none";
+   draw();
+   setInterval('drawBall()',1500);
+   }else{
+   totalTime-=1;
+   setTimeout("updateClock()",1000);
+   }
+   }
+     
+   //funcion para generar carton
+   function BingoCard(){
+     this.matrix = [];
+     this.generateMatrix= () =>{
+         //variables para array BINGO 
+         var b = [];
+         var i = [];
+         var n = [];
+         var g = [];
+         var o = [];
+   //validaciones para el array de cada letra y asi armar carton
+         for(var a =0; a<5; a++){
+             b[a]= Math.floor(Math.random()*(15-1)+1);
+         }
+         for(var outer = 0; outer <b.length; outer++){
+             for(var inner =0; inner <b.length; inner++){
+                 if(inner!= outer && b[outer]== b[inner]){
+                     b[outer] = Math.floor(Math.random()*(15-1)+1);
+                 }
+             }
+         }
+      
+      this.matrix.push(b);
+   
+      for(var a =0; a<5; a++){
+         i[a]= Math.floor(Math.random()*(30-16)+16);
+     }
+     for(var outer = 0; outer <i.length; outer++){
+         for(var inner =0; inner <i.length; inner++){
+             if(inner!= outer && i[outer]== i[inner]){
+                 i[outer] = Math.floor(Math.random()*(30-16)+16);
+                 }
+             }
+         }
+     this.matrix.push(i);
+   
+   
+     for(var a =0; a<5; a++){
+         n[a]= Math.floor(Math.random()*(45-31)+31);
+     }
+     for(var outer = 0; outer <n.length; outer++){
+         for(var inner =0; inner <n.length; inner++){
+             if(inner!= outer && n[outer]== n[inner]){
+                 n[outer] = Math.floor(Math.random()*(45-31)+31);
+             }
+         }
+     }
+     this.matrix.push(n);
+   
+     for(var a =0; a<5; a++){
+         g[a]= Math.floor(Math.random()*(60-46)+46);
+     }
+     for(var outer = 0; outer <g.length; outer++){
+         for(var inner =0; inner <g.length; inner++){
+             if(inner!= outer && g[outer]== g[inner]){
+                 g[outer] = Math.floor(Math.random()*(60-46)+46);
+             }
+         }
+     }
+     this.matrix.push(g);
+   
+     for(var a =0; a<5; a++){
+         o[a]= Math.floor(Math.random()*(75-61)+61);
+     }
+     for(var outer = 0; outer <o.length; outer++){
+         for(var inner =0; inner <o.length; inner++){
+             if(inner!= outer && o[outer]== o[inner]){
+                 o[outer] = Math.floor(Math.random()*(75-61)+61);
+             }
+         }
+     }
+     this.matrix.push(o);
+     return this.matrix;
+   }
+   
+     //método para generar tabla
+     this.drawCard = () =>{
+         return `<div>
+             <table>
+                 <tr>
+                     <th>B</th>
+                     <th>I</th>
+                     <th>N</th>
+                     <th>G</th>
+                     <th>O</th>
+                 </tr>
+                 <tr>
+                     <td id = "${this.matrix[0][0]}">${this.matrix[0][0]}</td>
+                     <td id = "${this.matrix[1][0]}">${this.matrix[1][0]}</td>
+                     <td id = "${this.matrix[2][0]}">${this.matrix[2][0]}</td>
+                     <td id = "${this.matrix[3][0]}">${this.matrix[3][0]}</td>
+                     <td id = "${this.matrix[4][0]}">${this.matrix[4][0]}</td>
+                 </tr>
+                 <tr>
+                     <td id = "${this.matrix[0][1]}">${this.matrix[0][1]}</td>
+                     <td id = "${this.matrix[1][1]}">${this.matrix[1][1]}</td>
+                     <td id = "${this.matrix[2][1]}">${this.matrix[2][1]}</td>
+                     <td id = "${this.matrix[3][1]}">${this.matrix[3][1]}</td>
+                     <td id = "${this.matrix[4][1]}">${this.matrix[4][1]}</td>
+                 </tr>
+                 <tr>
+                     <td id = "${this.matrix[0][2]}">${this.matrix[0][2]}</td>
+                     <td id = "${this.matrix[1][2]}">${this.matrix[1][2]}</td>
+                     <td id = "${this.matrix[2][2]}" style="background:red;"> <p id="free">FREE</p></td>
+                     <td id = "${this.matrix[3][2]}">${this.matrix[3][2]}</td>
+                     <td id = "${this.matrix[4][2]}">${this.matrix[4][2]}</td>
+                 </tr>
+                 <tr>
+                     <td id = "${this.matrix[0][3]}">${this.matrix[0][3]}</td>
+                     <td id = "${this.matrix[1][3]}">${this.matrix[1][3]}</td>
+                     <td id = "${this.matrix[2][3]}">${this.matrix[2][3]}</td>
+                     <td id = "${this.matrix[3][3]}">${this.matrix[3][3]}</td>
+                     <td id = "${this.matrix[4][3]}">${this.matrix[4][3]}</td>
+                 </tr>
+                 <tr>
+                     <td id = "${this.matrix[0][4]}">${this.matrix[0][4]}</td>
+                     <td id = "${this.matrix[1][4]}">${this.matrix[1][4]}</td>
+                     <td id = "${this.matrix[2][4]}">${this.matrix[2][4]}</td>
+                     <td id = "${this.matrix[3][4]}">${this.matrix[3][4]}</td>
+                     <td id = "${this.matrix[4][4]}">${this.matrix[4][4]}</td>
+                 </tr>
+   
+             </table>
+             <br></br>
+         </div>`
+     }
+   }
+   
+   
+   //funcion para generar juego de bingo
+   function BallDraw(){
+     this.ballDrawnNumber = [];
+     this.ballDrawnLetter = [];
+   
+     this.drawBall = () =>{
+         let repeat=0;
+         let ballLetter;
+         let ballNumber = 1 + Math.floor(Math.random()*75);
+         for(var index = 0; index < 75; index++){
+             if(ballNumber == this.ballDrawnNumber[index] && ballLetter == this.ballDrawnLetter[index]){
+                 repeat++;
+             }
+         }
+         if (repeat==0){
+             if(ballNumber < 15){
+                 this.ballDrawnLetter.push("B");
+                 this.ballDrawnNumber.push(ballNumber);
+             }
+             else if(ballNumber > 15 && ballNumber <= 30){
+                 this.ballDrawnLetter.push("I");
+                 this.ballDrawnNumber.push(ballNumber);
+             }
+             else if(ballNumber > 31 && ballNumber<= 45){
+                 this.ballDrawnLetter.push("N");
+                 this.ballDrawnNumber.push(ballNumber);
+             }
+             else if(ballNumber >= 46 && ballNumber <= 60){
+                 this.ballDrawnLetter.push("G");
+                 this.ballDrawnNumber.push(ballNumber);
+             }
+             else if(ballNumber >= 61  && ballNumber <=75){
+                 this.ballDrawnLetter.push("O");
+                 this.ballDrawnNumber.push(ballNumber);
+             }
+         }
+         else{
+             ballNumber = 1 + Math.floor(Math.random()*75)
+         }
+         repeat=0;
+     }
+   }
+   
+   let divBingoCard= document.getElementById("divBingoCard");
+   let txtInput = document.getElementById("txtInput");
+   let pcardCount = document.getElementById("pCount");
+   let bntDraw = document.getElementById("bntDraw");
+   let pdrawBall = document.getElementById("pdrawBall");
+   let counter=0;
+   let card;
+   let ballDraw;
+   let cardMatrixTotal=[];
+   let cardMatrix;
+   let cardLength;
+   let BingoWinner = false;
+   
+   
+   function draw(){
+   
+   //alert(txtInput.value);
+   
+       if(txtInput.value == ""){
+           alert("Ingrese Valor");
+       } else{
+           if(isNaN(txtInput.value)){
+               alert("Ingrese número unicamente");
+               txtInput.value = null;
+           }else{
+               for(var i=0; i < txtInput.value; i++){
+                   card = new BingoCard();
+                   card.generateMatrix();
+                   divBingoCard.innerHTML += card.drawCard();
+                   counter++;
+                   cardMatrix = card.matrix;
+                   cardMatrixTotal.push(cardMatrix);
+               }
+               txtInput.value=null;
+           }
+           
+       }
+       pcardCount.innerHTML= `Cartón Nro: ${counter}`;
+   }
+   
+   function drawBall(){
+       ballDraw = new BallDraw();
+       ballDraw.drawBall();
+   
+       pdrawBall.innerHTML = ballDraw.ballDrawnLetter+" - "+ ballDraw.ballDrawnNumber; 
+   
+       for(var i=0; i< cardMatrixTotal.length; i++){
+           for( var j=0; j< cardMatrixTotal[i].length; j++){
+               for(var k=0; k < cardMatrixTotal[i][j].length; k++){
+                   if (cardMatrixTotal[i][j][k]== ballDraw.ballDrawnNumber){
+                       document.getElementById(cardMatrixTotal[i][j][k]).style.background = "red";
+                       checkBingoWinner();
+                   }                
+    
+               }
+           }
+       }
+   if(BingoWinner==true){
+       showWinnerCard();
+   }
+   }
+   //confirmacion de ganador
+   function showWinnerCard(){
+     let confirmation = confirm("Bingo! Felicidades...\n Mostrar Bingo!");
+     if(confirmation == true){
+         window.location.href="http://localhost:8080";
+     }   
+   }
+   
+   function clearCards(){
+       let confirmation=confirm("Reiniciar Juego");
+       if (confirmation== true){
+       }
+   }
+   
+   function checkBingoWinner(){
+   //columna 0
+       let c0r0 = document.getElementById(cardMatrixTotal[0][0][0]);
+       let c0r0_color= c0r0.style.background;
+       let c0r1 = document.getElementById(cardMatrixTotal[0][0][1]);
+       let c0r1_color= c0r1.style.background;
+       let c0r2 = document.getElementById(cardMatrixTotal[0][0][2]);
+       let c0r2_color= c0r2.style.background;
+       let c0r3 = document.getElementById(cardMatrixTotal[0][0][3]);
+       let c0r3_color= c0r3.style.background;
+       let c0r4 = document.getElementById(cardMatrixTotal[0][0][4]);
+       let c0r4_color= c0r4.style.background;
+   
+   
+       //columna 1
+       let c1r0 = document.getElementById(cardMatrixTotal[0][1][0]);
+       let c1r0_color= c1r0.style.background;
+       let c1r1 = document.getElementById(cardMatrixTotal[0][1][1]);
+       let c1r1_color= c1r1.style.background;
+       let c1r2 = document.getElementById(cardMatrixTotal[0][1][2]);
+       let c1r2_color= c1r2.style.background;
+       let c1r3 = document.getElementById(cardMatrixTotal[0][1][3]);
+       let c1r3_color= c1r3.style.background;
+       let c1r4 = document.getElementById(cardMatrixTotal[0][1][4]);
+       let c1r4_color= c1r4.style.background;
+   
+   
+   
+       //columna 2
+       let c2r0 = document.getElementById(cardMatrixTotal[0][2][0]);
+       let c2r0_color= c2r0.style.background;
+       let c2r1 = document.getElementById(cardMatrixTotal[0][2][1]);
+       let c2r1_color= c2r1.style.background;
+       let c2r2 = document.getElementById(cardMatrixTotal[0][2][2]);
+       let c2r2_color= c2r2.style.background;
+       let c2r3 = document.getElementById(cardMatrixTotal[0][2][3]);
+       let c2r3_color= c2r3.style.background;
+       let c2r4 = document.getElementById(cardMatrixTotal[0][2][4]);
+       let c2r4_color= c2r4.style.background;
+   
+   
+   
+       //columna 3
+       let c3r0 = document.getElementById(cardMatrixTotal[0][3][0]);
+       let c3r0_color= c3r0.style.background;
+       let c3r1 = document.getElementById(cardMatrixTotal[0][3][1]);
+       let c3r1_color= c3r1.style.background;
+       let c3r2 = document.getElementById(cardMatrixTotal[0][3][2]);
+       let c3r2_color= c3r2.style.background;
+       let c3r3 = document.getElementById(cardMatrixTotal[0][3][3]);
+       let c3r3_color= c3r3.style.background;
+       let c3r4 = document.getElementById(cardMatrixTotal[0][3][4]);
+       let c3r4_color= c3r4.style.background;
+   
+   
+       //columna 3
+       let c4r0 = document.getElementById(cardMatrixTotal[0][4][0]);
+       let c4r0_color= c4r0.style.background;
+       let c4r1 = document.getElementById(cardMatrixTotal[0][4][1]);
+       let c4r1_color= c4r1.style.background;
+       let c4r2 = document.getElementById(cardMatrixTotal[0][4][2]);
+       let c4r2_color= c4r2.style.background;
+       let c4r3 = document.getElementById(cardMatrixTotal[0][4][3]);
+       let c4r3_color= c4r3.style.background;
+       let c4r4 = document.getElementById(cardMatrixTotal[0][4][4]);
+       let c4r4_color= c4r4.style.background;
+        
+   
+       if(c0r0_color== "red" && c0r1_color == "red" && c0r2_color == "red" && c0r3_color == "red" && c0r4_color == "red"){
+           BingoWinner= true;
+           c0r0.style.background="yellow";
+           c0r1.style.background="yellow";
+           c0r2.style.background="yellow";
+           c0r3.style.background="yellow";
+           c0r4.style.background="yellow";
+           BingoWinner=true;
+       } else if(c1r0_color== "red" && c1r1_color == "red" && c1r2_color == "red" && c1r3_color == "red" && c1r4_color == "red"){
+           c1r0.style.background="yellow";
+           c1r1.style.background="yellow";
+           c1r2.style.background="yellow";
+           c1r3.style.background="yellow";
+           c1r4.style.background="yellow";
+           BingoWinner=true;
+       }else if(c2r0_color== "red" && c2r1_color == "red" && c2r2_color == "red" && c2r3_color == "red" && c2r4_color == "red"){
+           c2r0.style.background="yellow";
+           c2r1.style.background="yellow";
+           c2r2.style.background="yellow";
+           c2r3.style.background="yellow";
+           c2r4.style.background="yellow";
+           BingoWinner=true;
+       } else if(c3r0_color== "red" && c3r1_color == "red" && c3r2_color == "red" && c3r3_color == "red" && c3r4_color == "red"){
+           c3r0.style.background="yellow";
+           c3r1.style.background="yellow";
+           c3r2.style.background="yellow";
+           c3r3.style.background="yellow";
+           c3r4.style.background="yellow";
+           BingoWinner=true;
+       }else if(c4r0_color== "red" && c4r1_color == "red" && c4r2_color == "red" && c4r3_color == "red" && c4r4_color == "red"){
+           c4r0.style.background="yellow";
+           c4r1.style.background="yellow";
+           c4r2.style.background="yellow";
+           c4r3.style.background="yellow";
+           c4r4.style.background="yellow";
+           BingoWinner=true;
+       }
+       //ganador digonal
+       else if(c0r0_color== "red" && c1r1_color == "red" && c2r2_color == "red" && c3r3_color == "red" && c4r4_color == "red"){
+           c0r0.style.background="yellow";
+           c1r1.style.background="yellow";
+           c2r2.style.background="yellow";
+           c3r3.style.background="yellow";
+           c4r4.style.background="yellow";
+           BingoWinner=true;
+       }
+       else if(c0r4_color== "red" && c1r3_color == "red" && c2r2_color == "red" && c3r1_color == "red" && c4r0_color == "red"){
+           c0r4.style.background="yellow";
+           c1r3.style.background="yellow";
+           c2r2.style.background="yellow";
+           c3r1.style.background="yellow";
+           c4r0.style.background="yellow";
+           BingoWinner=true;
+       }else{
+           console.log("No hay Bingo");
+   
+       }
+   }
+   
+</script>
+</body>
