@@ -4,15 +4,15 @@
 
 
 ### Tecnologias Implementadas
-NodeJS
-SpringBoot
-javaScript
-Html
-CSS
-Bootstrap
-Java
-MongoBd
-MySql
+- NodeJS
+- SpringBoot
+- javaScript
+- Html
+- CSS
+- Bootstrap
+- Java
+- MongoBd
+- MySql
 
 
 ### Pendiente
