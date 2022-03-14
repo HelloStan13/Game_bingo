@@ -16,9 +16,9 @@ MySql
 
 
 ### Pendiente
-El juego es ara un solo jugador
-Backend de salas d ejuego y jugadores
-Mostrar jugadores en Linea
+- El juego es para un solo jugador
+- Backend de salas d ejuego y jugadores
+- Mostrar jugadores en Linea
 
 ## Contacto
 Aplicación desarrollada por  Adryan Ynfante
