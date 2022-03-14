@@ -17,7 +17,7 @@ MySql
 
 ### Pendiente
 - El juego es para un solo jugador
-- Backend de salas d ejuego y jugadores
+- Backend de salas de juego 
 - Mostrar jugadores en Linea
 
 ## Contacto
